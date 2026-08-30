@@ -1,0 +1,18 @@
+# Godot 4 - .gitignore
+# Godot-specific ignores
+.godot/
+*.uid
+
+# Import caches and editor-generated files
+**/.godot/
+
+# Export and build artifacts
+export/
+*.import
+
+# Editor-specific files
+.mono/
+
+# OS-specific
+.DS_Store
+Thumbs.db
