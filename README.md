@@ -9,3 +9,5 @@ In a previous attempt to make a rage-inducing platformer or a rogue-like stage/l
 The game will be developed as a means to feel like a digital escape. Players can walk around town while listening to relaxing music, stop by shops, interact with NPCs, or complete small jobs. As players continue exploring and completing activities, they gradually unlock more ways to express themselves and customize their virtual life. They can also sit somewhere and enjoy the scenery, or simply wander around without having to accomplish anything.
 
 There is no pressure to be the strongest or the fastest. The world is there for you to enjoy at your own pace.
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50f236e8-19c8-40ae-b595-4dd077025537" />
