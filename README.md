@@ -11,3 +11,7 @@ The game will be developed as a means to feel like a digital escape. Players can
 There is no pressure to be the strongest or the fastest. The world is there for you to enjoy at your own pace.
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/50f236e8-19c8-40ae-b595-4dd077025537" />
+
+
+Week 2: Core mechanic + juice (with animations for play testing)
+<img width="1152" height="647" alt="image" src="https://github.com/user-attachments/assets/71c988d6-f193-4060-8c6b-12de87606816" />
