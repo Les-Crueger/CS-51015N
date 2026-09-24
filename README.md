@@ -15,3 +15,8 @@ There is no pressure to be the strongest or the fastest. The world is there for 
 
 Week 2: Core mechanic + juice (with animations for play testing)
 <img width="1152" height="647" alt="image" src="https://github.com/user-attachments/assets/71c988d6-f193-4060-8c6b-12de87606816" />
+
+Week 3: Level Design
+<img width="922" height="517" alt="image" src="https://github.com/user-attachments/assets/04966d4a-7a14-4166-b799-102e9845eb00" />
+<img width="922" height="517" alt="image" src="https://github.com/user-attachments/assets/0b2614f1-6a1f-4a12-9914-04d36625dba0" />
+
