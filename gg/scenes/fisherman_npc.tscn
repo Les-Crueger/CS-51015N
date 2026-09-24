@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://pptw32udav61"]
+
+[ext_resource type="Script" uid="uid://c3uxmt7o0uvpt" path="res://scripts/fisherman_npc.gd" id="1_fisherman"]
+[ext_resource type="Texture2D" uid="uid://dgl5hpxnijxmd" path="res://assets/Pixel Crawler - Free Pack/Entities/Npc's/Citizen_F/Peasant_A/Idle/Idle-Sheet.png" id="2_peasant"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_barrier"]
+size = Vector2(15, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 16.03122
+
+[node name="FishermanNPC" type="StaticBody2D" unique_id=1483199426]
+collision_mask = 0
+script = ExtResource("1_fisherman")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2102656132]
+texture = ExtResource("2_peasant")
+region_enabled = true
+region_rect = Rect2(7.199997, 9.600006, 48, 48)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=211010027]
+position = Vector2(0.5, -1)
+shape = SubResource("RectangleShape2D_barrier")
+
+[node name="InteractArea" type="Area2D" parent="." unique_id=981237891]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=892374892]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_interact")
+
+[node name="Label" type="Label" parent="." unique_id=1932955689]
+visible = false
+offset_left = -100.0
+offset_top = -45.0
+offset_right = 100.0
+offset_bottom = -25.0
+theme_override_font_sizes/font_size = 9
+text = "Fisherman Fred"
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2

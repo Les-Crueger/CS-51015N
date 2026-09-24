@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/fish_swimmer.gd" id="1_fish_swim"]
+[ext_resource type="Texture2D" path="res://assets/Pixel Crawler - Free Pack/Environment/Props/Static/Meat.png" id="2_fish_tex"]
+
+[node name="FishSwimmer" type="Node2D"]
+script = ExtResource("1_fish_swim")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.6, 0.8, 1.0, 0.8)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_fish_tex")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)

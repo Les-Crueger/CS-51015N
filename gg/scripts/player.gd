@@ -23,6 +23,7 @@ var inventory_ui_scene = preload("res://scenes/inventory_ui.tscn")
 var inventory_ui = null
 
 var admin_key_override: bool = false
+var is_fishing: bool = false
 
 # Helper property for level transition compatibility
 var has_level2_key: bool:
@@ -72,6 +73,7 @@ var tilemap: TileMapLayer = null
 var footstep_timer: float = 0.0
 
 func _ready() -> void:
+	add_to_group("player")
 	tilemap = get_parent().get_node_or_null("TileMapLayer") as TileMapLayer
 	
 	# Pre-load all textures
@@ -84,9 +86,8 @@ func _ready() -> void:
 	inventory.max_slots = 10
 	add_child(inventory)
 	
-	# Add starter Fishing Rod and Level 2 Key to inventory
+	# Add starter Fishing Rod to inventory
 	inventory.add_item("Fishing Rod", 1, "res://icon.svg")
-	inventory.add_item("Level 2 Key", 1, "res://icon.svg")
 
 	inventory_ui = inventory_ui_scene.instantiate()
 	add_child(inventory_ui)
@@ -122,14 +123,19 @@ func _physics_process(delta: float) -> void:
 	var current_speed := speed * (run_multiplier if is_running else 1.0)
 
 	if input_vector != Vector2.ZERO:
+		if is_fishing:
+			is_fishing = false
 		velocity = velocity.move_toward(input_vector * current_speed, acceleration * delta)
 		_update_facing(input_vector)
 		_footstep_juice(delta, is_running)
 		play_action("run" if is_running else "walk")
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-		sprite.scale = sprite.scale.lerp(Vector2.ONE, 10.0 * delta)
-		play_action("idle")
+		if is_fishing:
+			play_action("fish")
+		else:
+			sprite.scale = sprite.scale.lerp(Vector2.ONE, 10.0 * delta)
+			play_action("idle")
 
 	move_and_slide()
 
@@ -232,23 +238,36 @@ func _check_for_water() -> void:
 
 	if near_water:
 		interact_prompt.visible = true
-		interact_prompt.text = "Press E to Fish" if has_fishing_rod else "Need fishing rod"
+		if is_fishing:
+			interact_prompt.text = "Press E to Stop Fishing"
+		else:
+			interact_prompt.text = "Press E to Fish" if has_fishing_rod else "Need fishing rod"
 	else:
+		if is_fishing:
+			is_fishing = false
 		interact_prompt.visible = false
 
 func _try_interact() -> void:
 	# ── Water / fishing ──
 	if interact_prompt.visible:
 		if has_fishing_rod:
-			print("Fishing... Caught a Fish!")
-			play_oneshot("fish")
-			
-			# Add Fish item to inventory
-			inventory.add_item("Fish", 1, "res://icon.svg")
-			
-			var tween := create_tween()
-			tween.tween_property(sprite, "position:y", -6.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-			tween.tween_property(sprite, "position:y", 0.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+			if is_fishing:
+				# Stop fishing
+				is_fishing = false
+				print("Stopped fishing.")
+				play_action("idle", true)
+				interact_prompt.text = "Press E to Fish"
+			else:
+				# Start fishing
+				is_fishing = true
+				print("Started fishing... Caught a Fish!")
+				play_action("fish", true)
+				inventory.add_item("Fish", 1, "res://icon.svg")
+				interact_prompt.text = "Press E to Stop Fishing"
+				
+				var tween := create_tween()
+				tween.tween_property(sprite, "position:y", -6.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+				tween.tween_property(sprite, "position:y", 0.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		else:
 			print("You need a fishing rod!")
 		return
@@ -259,6 +278,17 @@ func _try_interact() -> void:
 		if body.has_method("interact"):
 			play_oneshot("collect")
 			body.interact()
+			return
+
+	var areas := interact_area.get_overlapping_areas()
+	for area in areas:
+		if area.has_method("interact"):
+			play_oneshot("collect")
+			area.interact()
+			return
+		elif area.get_parent() and area.get_parent().has_method("interact"):
+			play_oneshot("collect")
+			area.get_parent().interact()
 			return
 
 	print("Nothing to interact with here.")

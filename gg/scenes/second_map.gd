@@ -6,7 +6,11 @@ var sign_scene = preload("res://scenes/interactable_sign.tscn")
 func _ready() -> void:
 	# Spawn player
 	var player = player_scene.instantiate()
-	player.position = Vector2(42,448)
+	if GameState.use_custom_spawn:
+		player.position = GameState.target_spawn_pos
+		GameState.use_custom_spawn = true
+	else:
+		player.position = Vector2(32, 432)
 	add_child(player)
 	
 	# Spawn sign
