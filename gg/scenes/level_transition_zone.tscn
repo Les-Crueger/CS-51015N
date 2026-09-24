@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dfee6msyqurqq"]
+
+[ext_resource type="Script" uid="uid://cu1a4xpsyy4vw" path="res://scripts/level_transition.gd" id="1_transition"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_transition"]
+size = Vector2(64, 77)
+
+[node name="LevelTransitionZone" type="Area2D" unique_id=445586668]
+collision_layer = 0
+script = ExtResource("1_transition")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=929801508]
+position = Vector2(0, 15.5)
+shape = SubResource("RectangleShape2D_transition")
+
+[node name="Label" type="Label" parent="." unique_id=1865938213]
+visible = false
+offset_left = -120.0
+offset_top = -75.0
+offset_right = 120.0
+offset_bottom = -35.0
+theme_override_font_sizes/font_size = 9
+text = "[ Cave Entrance ]
+Sell 5 fish to the fisherman to get the key"
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2
