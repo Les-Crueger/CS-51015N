@@ -55,7 +55,7 @@ func interact() -> void:
 		elif current_fish >= required_fish_count:
 			# Trade 5 Fish for Level 2 Key
 			player.inventory.remove_item("Fish", required_fish_count)
-			player.inventory.add_item("Level 2 Key", 1, "res://icon.svg")
+			player.inventory.add_item("Level 2 Key", 1)
 			_show_dialogue("Fisherman: 'Amazing! Here is the Key to the Cave!'")
 			print("QUEST COMPLETE: Traded 5 Fish for Level 2 Key!")
 		else:

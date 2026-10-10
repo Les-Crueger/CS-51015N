@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://c7rn8v2k5m1qa"]
+
+[ext_resource type="Script" path="res://scenes/level_transition_2.gd" id="1_transition2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_transition2"]
+size = Vector2(64, 77)
+
+[node name="LevelTransitionZone2" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_transition2")
+spawn_walk_direction = Vector2(1, 0)
+spawn_walk_distance = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 15.5)
+shape = SubResource("RectangleShape2D_transition2")
+
+[node name="Label" type="Label" parent="."]
+visible = false
+offset_left = -120.0
+offset_top = -75.0
+offset_right = 120.0
+offset_bottom = -35.0
+theme_override_font_sizes/font_size = 9
+text = "[ Exit Cave ]
+Light up 2 campfires before leaving."
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2

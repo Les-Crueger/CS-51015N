@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://daav2k4m1n5x2"]
+
+[ext_resource type="Script" uid="uid://cwmhtlwr120up" path="res://scripts/caveman_npc.gd" id="1_caveman"]
+[ext_resource type="Texture2D" uid="uid://lah55pt4cfc6" path="res://assets/Pixel Crawler - Free Pack/Entities/Npc's/Rogue/Idle/Idle-Sheet.png" id="2_rogue"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_barrier"]
+size = Vector2(16, 26)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 16.27882
+
+[node name="CavemanNPC" type="StaticBody2D" unique_id=1198341371]
+collision_mask = 0
+script = ExtResource("1_caveman")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=508862997]
+texture = ExtResource("2_rogue")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=45049736]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_barrier")
+
+[node name="InteractArea" type="Area2D" parent="." unique_id=1944632250]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=481378623]
+position = Vector2(0, 3)
+shape = SubResource("CircleShape2D_interact")
+
+[node name="Label" type="Label" parent="." unique_id=717308051]
+visible = false
+offset_left = -100.0
+offset_top = -40.0
+offset_right = 100.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 9
+text = "Caveman Ugg"
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2

@@ -12,6 +12,9 @@ script = ExtResource("1_transition")
 target_scene = "res://scenes/firstmap.tscn"
 required_key_name = ""
 locked_message = ""
+spawn_walk_direction = Vector2(0, 1)
+spawn_walk_distance = 40.0
+
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_back")

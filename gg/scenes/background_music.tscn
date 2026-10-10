@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://c8fw3e37w8qqs"]
+
+[ext_resource type="AudioStream" uid="uid://b154brcrs584c" path="res://Music/music/little corner of heaven.mp3" id="1_0rulj"]
+[ext_resource type="Script" uid="uid://cl1id3bngdyjn" path="res://scenes/background_music.gd" id="1_83psx"]
+
+[node name="Node2D" type="Node2D" unique_id=2061696373]
+script = ExtResource("1_83psx")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=766893524]
+stream = ExtResource("1_0rulj")
+autoplay = true

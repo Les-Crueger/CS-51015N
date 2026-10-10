@@ -14,6 +14,16 @@ extends CharacterBody2D
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var interact_area: Area2D = $Interact
 @onready var interact_prompt: Label = $InteractPrompt
+@onready var camera: Camera2D = $Camera2D
+
+# --- JUICE / FEEL ---
+var shake_intensity: float = 0.0
+
+func add_screen_shake(amount: float) -> void:
+	shake_intensity = max(shake_intensity, amount)
+
+func hit_stop(duration_ms: int = 40) -> void:
+	OS.delay_msec(duration_ms)
 
 # ─────────────────────────────────────────────
 #  Inventory & Quest System
@@ -25,14 +35,23 @@ var inventory_ui = null
 var admin_key_override: bool = false
 var is_fishing: bool = false
 
+var is_auto_walking: bool = false
+var _auto_walk_dir: Vector2 = Vector2.ZERO
+var _auto_walk_target_pos: Vector2 = Vector2.ZERO
+
 # Helper property for level transition compatibility
 var has_level2_key: bool:
 	get:
 		return admin_key_override or (inventory.has_item("Level 2 Key") if inventory else false)
 
+var has_level3_key: bool:
+	get:
+		return admin_key_override or GameState.lit_bonfires_count >= 2 or (inventory.has_item("Level 3 Key") if inventory else false)
+
 var has_fishing_rod: bool:
 	get:
 		return inventory.has_item("Fishing Rod") if inventory else true
+
 
 # ─────────────────────────────────────────────
 #  Animation data (4-Directional)
@@ -52,13 +71,18 @@ const ANIMS := {
 	"run_down":     { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Run_Base/Run_Down-Sheet.png",     "frames": 6, "fps": 12, "loop": true  },
 	"run_up":       { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Run_Base/Run_Up-Sheet.png",       "frames": 6, "fps": 12, "loop": true  },
 
-	"fish_side":    { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Fishing_Base/Fishing_Side-Sheet.png", "frames": 8, "fps": 6, "loop": true },
-	"fish_down":    { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Fishing_Base/Fishing_Down-Sheet.png", "frames": 8, "fps": 6, "loop": true },
-	"fish_up":      { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Fishing_Base/Fishing_Up-Sheet.png",   "frames": 8, "fps": 6, "loop": true },
+	"fish_side":    { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Fishing_Base/Fishing_Side-Sheet.png", "frames": 8, "fps": 6, "loop": false },
+	"fish_down":    { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Fishing_Base/Fishing_Down-Sheet.png", "frames": 8, "fps": 6, "loop": false },
+	"fish_up":      { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Fishing_Base/Fishing_Up-Sheet.png",   "frames": 8, "fps": 6, "loop": false },
+
 
 	"collect_side": { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Collect_Base/Collect_Side-Sheet.png", "frames": 8, "fps": 8, "loop": false },
 	"collect_down": { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Collect_Base/Collect_Down-Sheet.png", "frames": 8, "fps": 8, "loop": false },
 	"collect_up":   { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Collect_Base/Collect_Up-Sheet.png",   "frames": 8, "fps": 8, "loop": false },
+
+	"hit_side":     { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Hit_Base/Hit_Side-Sheet.png", "frames": 4, "fps": 10, "loop": false },
+	"hit_down":     { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Hit_Base/Hit_Down-Sheet.png", "frames": 4, "fps": 10, "loop": false },
+	"hit_up":       { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Hit_Base/Hit_Up-Sheet.png",   "frames": 4, "fps": 10, "loop": false },
 }
 
 var current_action: String = "idle"
@@ -86,12 +110,18 @@ func _ready() -> void:
 	inventory.max_slots = 10
 	add_child(inventory)
 	
-	# Add starter Fishing Rod to inventory
-	inventory.add_item("Fishing Rod", 1, "res://icon.svg")
+	# Add starter Fishing Rod only if brand new game
+	if not GameState.is_inventory_saved:
+		inventory.add_item("Fishing Rod", 1)
 
 	inventory_ui = inventory_ui_scene.instantiate()
 	add_child(inventory_ui)
 	inventory_ui.setup(inventory)
+
+	# Instantiate Pause Menu UI
+	var pause_menu_scene = preload("res://scenes/pause_menu.tscn")
+	var pause_menu = pause_menu_scene.instantiate()
+	add_child(pause_menu)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -112,6 +142,18 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if _one_shot_queue != "":
 		move_and_slide()
+		return
+
+	if is_auto_walking:
+		velocity = _auto_walk_dir * speed
+		_update_facing(_auto_walk_dir)
+		play_action("walk")
+		move_and_slide()
+		if global_position.distance_to(_auto_walk_target_pos) <= 3.0:
+			global_position = _auto_walk_target_pos
+			is_auto_walking = false
+			velocity = Vector2.ZERO
+			play_action("idle")
 		return
 
 	var input_vector := Vector2.ZERO
@@ -145,10 +187,31 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
 		_try_interact()
 
+func perform_auto_walk(dir: Vector2, dist: float) -> void:
+	if dir == Vector2.ZERO or dist <= 0.0:
+		return
+	is_auto_walking = true
+	_auto_walk_dir = dir.normalized()
+	_auto_walk_target_pos = global_position + (_auto_walk_dir * dist)
+
+
 # ════════════════════════════════════════════
 #  ANIMATION PROCESS
 # ════════════════════════════════════════════
 func _process(delta: float) -> void:
+	# Apply camera shake
+	if shake_intensity > 0:
+		if camera:
+			camera.offset = Vector2(
+				randf_range(-shake_intensity, shake_intensity),
+				randf_range(-shake_intensity, shake_intensity)
+			)
+		shake_intensity = lerpf(shake_intensity, 0.0, 10.0 * delta)
+		if shake_intensity < 0.5:
+			shake_intensity = 0.0
+			if camera:
+				camera.offset = Vector2.ZERO
+	
 	if current_anim == "":
 		return
 
@@ -248,47 +311,57 @@ func _check_for_water() -> void:
 		interact_prompt.visible = false
 
 func _try_interact() -> void:
-	# ── Water / fishing ──
+	# ── Generic interactables FIRST (NPCs, signs, chests…) ──
+	# Checked before water so NPCs near the pond are always reachable.
+	var bodies := interact_area.get_overlapping_bodies()
+	for body in bodies:
+		if body.has_method("interact"):
+			var res = body.call("interact")
+			if res != false:
+				play_oneshot("collect")
+			return
+
+	var areas := interact_area.get_overlapping_areas()
+	for area in areas:
+		if area.has_method("interact"):
+			var res = area.call("interact")
+			if res != false:
+				play_oneshot("collect")
+			return
+		elif area.get_parent() and area.get_parent().has_method("interact"):
+			var res = area.get_parent().call("interact")
+			if res != false:
+				play_oneshot("collect")
+			return
+
+	# ── Water / fishing fallback ──
 	if interact_prompt.visible:
 		if has_fishing_rod:
 			if is_fishing:
-				# Stop fishing
 				is_fishing = false
 				print("Stopped fishing.")
 				play_action("idle", true)
 				interact_prompt.text = "Press E to Fish"
 			else:
-				# Start fishing
 				is_fishing = true
 				print("Started fishing... Caught a Fish!")
 				play_action("fish", true)
-				inventory.add_item("Fish", 1, "res://icon.svg")
+				inventory.add_item("Fish", 1)
 				interact_prompt.text = "Press E to Stop Fishing"
-				
+				# Drain rod durability on each catch
+				var rod_name = "Iron Fishing Rod" if inventory.has_item("Iron Fishing Rod") else "Fishing Rod"
+				inventory.use_tool(rod_name)
+				# Highlight active rod in inventory UI
+				if inventory_ui and inventory_ui.has_method("set_active_item"):
+					inventory_ui.set_active_item(rod_name)
+				var am = get_node_or_null("/root/AudioManager")
+				if am and am.has_method("play_fish"):
+					am.play_fish()
 				var tween := create_tween()
 				tween.tween_property(sprite, "position:y", -6.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 				tween.tween_property(sprite, "position:y", 0.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		else:
 			print("You need a fishing rod!")
 		return
-
-	# ── Generic interactables (signs, NPCs, chests…) ──
-	var bodies := interact_area.get_overlapping_bodies()
-	for body in bodies:
-		if body.has_method("interact"):
-			play_oneshot("collect")
-			body.interact()
-			return
-
-	var areas := interact_area.get_overlapping_areas()
-	for area in areas:
-		if area.has_method("interact"):
-			play_oneshot("collect")
-			area.interact()
-			return
-		elif area.get_parent() and area.get_parent().has_method("interact"):
-			play_oneshot("collect")
-			area.get_parent().interact()
-			return
 
 	print("Nothing to interact with here.")

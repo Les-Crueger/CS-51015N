@@ -8,6 +8,9 @@ size = Vector2(64, 77)
 [node name="LevelTransitionZone" type="Area2D" unique_id=445586668]
 collision_layer = 0
 script = ExtResource("1_transition")
+spawn_walk_direction = Vector2(1, 0)
+spawn_walk_distance = 40.0
+
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=929801508]
 position = Vector2(0, 15.5)

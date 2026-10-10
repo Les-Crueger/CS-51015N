@@ -11,9 +11,18 @@ config_version=5
 [application]
 
 config/name="GG"
-run/main_scene="uid://cth0c7dx2leeb"
+run/main_scene="uid://cakcmjc7mftgi"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="uid://dop4lbm2hrgma"
+
+[autoload]
+
+BackgroundMusic="*uid://cl1id3bngdyjn"
+AudioManager="*uid://c33ue3gtigqpr"
 
 [display]
 

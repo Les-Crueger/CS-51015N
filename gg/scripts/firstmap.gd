@@ -3,9 +3,11 @@ extends Node2D
 var player_scene = preload("res://scenes/player.tscn")
 var sign_scene = preload("res://scenes/interactable_sign.tscn")
 var fisherman_scene = preload("res://scenes/fisherman_npc.tscn")
-var fish_swimmer_scene = preload("res://scenes/fish_swimmer.tscn")
 
 func _ready() -> void:
+	# Start overworld BGM
+	BackgroundMusic.play_for_scene("res://scenes/firstmap.tscn")
+
 	# Spawn player
 	var player = player_scene.instantiate()
 	if GameState.use_custom_spawn:
@@ -25,11 +27,6 @@ func _ready() -> void:
 	fisherman.position = Vector2(620, 260)
 	add_child(fisherman)
 
-	# Spawn swimming fish in the water
-	var fish1 = fish_swimmer_scene.instantiate()
-	fish1.position = Vector2(850, 320)
-	add_child(fish1)
-
-	var fish2 = fish_swimmer_scene.instantiate()
-	fish2.position = Vector2(900, 400)
-	add_child(fish2)
+	# Fish in the pond are placed manually in the Godot scene editor.
+	# Open firstmap.tscn, drag in FishSwimmer scenes and position them on the pond.
+	# Configure each fish individually via the Inspector (swim axis, speed, offset, tint).
