@@ -1623,11 +1623,11 @@ target_spawn_pos = Vector2(1134, 423)
 spawn_walk_direction = Vector2(-1, 0)
 
 [node name="LevelTransition2" parent="." unique_id=1153502713 instance=ExtResource("6_lh1pt")]
-position = Vector2(672, -16)
+position = Vector2(672, -24)
 script = ExtResource("7_uf1g2")
 target_scene = "res://scenes/third_map.tscn"
-required_key_name = "has_level3_key"
-locked_message = "Light up 2 campfires first before leaving the cave."
+use_custom_spawn = true
+target_spawn_pos = Vector2(400, 500)
 spawn_walk_direction = Vector2(1, 0)
 spawn_walk_distance = 36.0
 
@@ -1657,3 +1657,4 @@ position = Vector2(576, 776)
 
 [node name="InteractableRock2" parent="." unique_id=1679318076 instance=ExtResource("7_wxrjg")]
 position = Vector2(992, 720)
+

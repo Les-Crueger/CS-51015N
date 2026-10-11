@@ -21,8 +21,8 @@ var target_player: CharacterBody2D = null
 # --- ANIMATION SETUP ---
 const FRAME_WIDTH := 32
 const FRAME_HEIGHT := 32
-var tex_idle = preload("res://assets/Pixel Crawler - Free Pack/Entities/Npc's/Knight/Idle-Sheet.png")
-var tex_run = preload("res://assets/Pixel Crawler - Free Pack/Entities/Npc's/Knight/Run-Sheet.png")
+var tex_idle = preload("res://assets/Pixel Crawler - Free Pack/Entities/Npc's/Knight/Idle/Idle-Sheet.png")
+var tex_run = preload("res://assets/Pixel Crawler - Free Pack/Entities/Npc's/Knight/Run/Run-Sheet.png")
 var current_frame: int = 0
 var anim_timer: float = 0.0
 var max_frames: int = 4
@@ -93,6 +93,6 @@ func _process_animation(delta: float) -> void:
 
 func _flip_sprite(vx: float) -> void:
 	if vx > 0.1:
-		sprite.flip_h = false
+		sprite.scale.x = 1
 	elif vx < -0.1:
-		sprite.flip_h = true
+		sprite.scale.x = -1

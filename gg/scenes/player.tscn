@@ -1,14 +1,10 @@
 [gd_scene format=3 uid="uid://beuiiabrxbcj1"]
 
 [ext_resource type="Script" uid="uid://dath4bwfa0mcu" path="res://scripts/player.gd" id="1_g2els"]
-[ext_resource type="Texture2D" path="res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Idle_Base/Idle_Side-Sheet.png" id="2_idle"]
-[ext_resource type="Texture2D" path="res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Walk_Base/Walk_Side-Sheet.png" id="3_walk"]
-[ext_resource type="Texture2D" path="res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Run_Base/Run_Side-Sheet.png" id="4_run"]
-[ext_resource type="Texture2D" path="res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Fishing_Base/Fishing_Side-Sheet.png" id="5_fish"]
-[ext_resource type="Texture2D" path="res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Collect_Base/Collect_Side-Sheet.png" id="6_collect"]
+[ext_resource type="Texture2D" uid="uid://jue1rc8m2hlh" path="res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Idle_Base/Idle_Side-Sheet.png" id="2_idle"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
-size = Vector2(30, 48)
+size = Vector2(17, 30)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
 radius = 40.0
@@ -22,6 +18,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 64, 64)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=841916144]
+position = Vector2(-0.5, 2)
 shape = SubResource("RectangleShape2D_player")
 
 [node name="Interact" type="Area2D" parent="." unique_id=763686339]

@@ -10,7 +10,7 @@ const ITEM_ICONS := {
 	"Fish":             "res://assets/Hollow Dolphin Fishing Icon Pack/Separated Sprites/16x16/fishing_icons_16x16_1.png",
 	"Fishing Rod":      "res://assets/DB Complete Inventory & UI/DB Complete UI Pack 1.0/cache/017-25-1-icon.png",
 	"Iron Fishing Rod": "res://assets/DB Complete Inventory & UI/DB Complete UI Pack 1.0/cache/017-25-1-icon.png",
-	"Pickaxe":          "res://assets/Hollow Dolphin Fishing Icon Pack/Separated Sprites/16x16/fishing_icons_16x16_103.png",
+	"Pickaxe":          "res://assets/Shikashi's Fantasy Icons Pack v2/Shikashi's Fantasy Icons Pack v2/pickaxe.png",
 	"Iron Pickaxe":     "res://assets/Hollow Dolphin Fishing Icon Pack/Separated Sprites/16x16/fishing_icons_16x16_103.png",
 	"Gold Pickaxe":     "res://assets/Hollow Dolphin Fishing Icon Pack/Separated Sprites/16x16/fishing_icons_16x16_103.png",
 	"Rocks":            "res://assets/Hollow Dolphin Fishing Icon Pack/Separated Sprites/16x16/fishing_icons_16x16_81.png",

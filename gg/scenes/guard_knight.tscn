@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://guard_knight_unique_id"]
+
+[ext_resource type="Script" uid="uid://new_guard_script_uid" path="res://scripts/guard_knight.gd" id="1_enemy"]
+[ext_resource type="Texture2D" uid="uid://cdc1ku7kinr7h" path="res://assets/Pixel Crawler - Free Pack/Entities/Npc's/Knight/Idle/Idle-Sheet.png" id="2_knight_idle"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_phys"]
+size = Vector2(14, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_detect"]
+radius = 120.0
+
+[node name="EnemyKnight" type="CharacterBody2D" unique_id=1919469506]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_enemy")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1533208092]
+texture = ExtResource("2_knight_idle")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1354827673]
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_phys")
+
+[node name="DetectArea" type="Area2D" parent="." unique_id=1722719985]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectArea" unique_id=1628644046]
+shape = SubResource("CircleShape2D_detect")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="." unique_id=1813563272]
+rect = Rect2(-16, -16, 32, 32)
+
+

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://lvl3_entrance_zone"]
+
+[ext_resource type="Script" path="res://scripts/level_transition.gd" id="1_transition"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_zone3"]
+size = Vector2(64, 80)
+
+[node name="LevelTransitionZone3" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_transition")
+# ─── Set these in the Inspector after placing the scene ───────────────────────
+# target_scene       → "res://scenes/third_map.tscn"  (already default)
+# required_key_name  → ""  (no key needed)
+# use_custom_spawn   → true
+# target_spawn_pos   → SET MANUALLY in Godot Inspector
+# spawn_walk_direction → Vector2(1, 0)  (walk right on arrival)
+# spawn_walk_distance  → 40.0
+# ─────────────────────────────────────────────────────────────────────────────
+target_scene = "res://scenes/third_map.tscn"
+required_key_name = ""
+locked_message = ""
+use_custom_spawn = true
+target_spawn_pos = Vector2(0, 0)
+spawn_walk_direction = Vector2(1, 0)
+spawn_walk_distance = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_zone3")
+
+[node name="Label" type="Label" parent="."]
+visible = false
+offset_left = -120.0
+offset_top = -75.0
+offset_right = 120.0
+offset_bottom = -35.0
+theme_override_font_sizes/font_size = 9
+text = "[ Third Map ]"
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2

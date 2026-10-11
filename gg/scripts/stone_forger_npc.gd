@@ -75,6 +75,15 @@ func interact() -> void:
 
 	var inv: Inventory = player.inventory
 
+	# Face the player
+	if sprite:
+		var diff = player.global_position - global_position
+		if abs(diff.x) > 5.0:
+			if diff.x < 0:
+				sprite.scale.x = -1
+			else:
+				sprite.scale.x = 1
+
 	# Jump / anvil-hit juice
 	if sprite:
 		var tween = create_tween()

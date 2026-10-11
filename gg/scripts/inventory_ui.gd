@@ -63,6 +63,102 @@ func apply_custom_styles() -> void:
 	title_label.add_theme_font_size_override("font_size", title_font_size)
 	title_label.add_theme_color_override("font_color", title_color)
 
+	_add_avatar_portrait()
+
+func _add_avatar_portrait() -> void:
+	var existing = title_label.get_parent().get_node_or_null("AvatarCard")
+	if existing:
+		return
+	var card = HBoxContainer.new()
+	card.name = "AvatarCard"
+	card.alignment = BoxContainer.ALIGNMENT_CENTER
+	card.add_theme_constant_override("separation", 8)
+	title_label.get_parent().add_child(card)
+	title_label.get_parent().move_child(card, 0) # Place at top
+
+	var p_box = PanelContainer.new()
+	p_box.custom_minimum_size = Vector2(40, 40)
+	var sb = StyleBoxFlat.new()
+	sb.bg_color = Color(0.12, 0.15, 0.22, 0.9)
+	sb.border_color = Color(0.4, 0.55, 0.75, 0.9)
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(4)
+	p_box.add_theme_stylebox_override("panel", sb)
+	card.add_child(p_box)
+
+	var stack = Control.new()
+	stack.custom_minimum_size = Vector2(36, 36)
+	p_box.add_child(stack)
+
+	var tex_path = "res://assets/Customizable 2D Pixel Character Spritesheet/Customizable 2D Pixel Character Spritesheet 2k.png"
+	if ResourceLoader.exists(tex_path) or FileAccess.file_exists(tex_path):
+		var tex = load(tex_path)
+		var tile := 160
+		var faces := [
+			Rect2(0 * tile, 0, tile, tile), Rect2(2 * tile, 0, tile, tile),
+			Rect2(4 * tile, 0, tile, tile), Rect2(6 * tile, 0, tile, tile),
+			Rect2(8 * tile, 0, tile, tile), Rect2(10 * tile, 0, tile, tile),
+			Rect2(12 * tile, 0, tile, tile), Rect2(14 * tile, 0, tile, tile)
+		]
+		var hairs := [
+			Rect2(-1, -1, 0, 0),
+			Rect2(0 * tile, 8 * tile, tile, tile), Rect2(2 * tile, 8 * tile, tile, tile),
+			Rect2(4 * tile, 8 * tile, tile, tile), Rect2(6 * tile, 8 * tile, tile, tile),
+			Rect2(8 * tile, 8 * tile, tile, tile), Rect2(0 * tile, 10 * tile, tile, tile),
+			Rect2(2 * tile, 10 * tile, tile, tile), Rect2(4 * tile, 10 * tile, tile, tile),
+			Rect2(6 * tile, 10 * tile, tile, tile), Rect2(8 * tile, 10 * tile, tile, tile),
+			Rect2(10 * tile, 10 * tile, tile, tile), Rect2(12 * tile, 10 * tile, tile, tile),
+			Rect2(0 * tile, 12 * tile, tile, tile), Rect2(4 * tile, 12 * tile, tile, tile),
+			Rect2(12 * tile, 12 * tile, tile, tile)
+		]
+		var outfits := [
+			Rect2(0 * tile, 16 * tile, tile, tile), Rect2(1 * tile, 16 * tile, tile, tile),
+			Rect2(2 * tile, 16 * tile, tile, tile), Rect2(3 * tile, 16 * tile, tile, tile),
+			Rect2(4 * tile, 16 * tile, tile, tile), Rect2(5 * tile, 16 * tile, tile, tile),
+			Rect2(12 * tile, 16 * tile, tile, tile), Rect2(14 * tile, 16 * tile, tile, tile),
+			Rect2(0 * tile, 17 * tile, tile, tile), Rect2(2 * tile, 17 * tile, tile, tile),
+			Rect2(4 * tile, 17 * tile, tile, tile), Rect2(12 * tile, 17 * tile, tile, tile),
+			Rect2(0 * tile, 18 * tile, tile, tile), Rect2(4 * tile, 18 * tile, tile, tile),
+			Rect2(10 * tile, 18 * tile, tile, tile), Rect2(12 * tile, 18 * tile, tile, tile),
+			Rect2(0 * tile, 20 * tile, tile, tile), Rect2(8 * tile, 20 * tile, tile, tile),
+			Rect2(10 * tile, 20 * tile, tile, tile)
+		]
+		var f_idx = clampi(GameState.avatar_face_index, 0, faces.size() - 1)
+		var h_idx = clampi(GameState.avatar_hair_index, 0, hairs.size() - 1)
+		var o_idx = clampi(GameState.avatar_outfit_index, 0, outfits.size() - 1)
+
+		var out_rect = TextureRect.new()
+		out_rect.custom_minimum_size = Vector2(36, 36)
+		out_rect.position = Vector2(0, 6)
+		out_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+		out_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		var o_at = AtlasTexture.new()
+		o_at.atlas = tex
+		o_at.region = outfits[o_idx]
+		out_rect.texture = o_at
+		stack.add_child(out_rect)
+
+		var face_rect = TextureRect.new()
+		face_rect.custom_minimum_size = Vector2(36, 36)
+		face_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+		face_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		var f_at = AtlasTexture.new()
+		f_at.atlas = tex
+		f_at.region = faces[f_idx]
+		face_rect.texture = f_at
+		stack.add_child(face_rect)
+
+		if hairs[h_idx].position.x >= 0:
+			var hair_rect = TextureRect.new()
+			hair_rect.custom_minimum_size = Vector2(36, 36)
+			hair_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+			hair_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			var h_at = AtlasTexture.new()
+			h_at.atlas = tex
+			h_at.region = hairs[h_idx]
+			hair_rect.texture = h_at
+			stack.add_child(hair_rect)
+
 	# Grid & separation
 	grid_container.columns = columns
 	grid_container.add_theme_constant_override("h_separation", grid_separation)

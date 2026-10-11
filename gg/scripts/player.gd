@@ -25,6 +25,16 @@ func add_screen_shake(amount: float) -> void:
 func hit_stop(duration_ms: int = 40) -> void:
 	OS.delay_msec(duration_ms)
 
+# Called by guard_knight when the player is knocked out
+func play_knockout() -> void:
+	set_physics_process(false)
+	# Screen shake
+	add_screen_shake(8.0)
+	# Play the death animation for the current facing direction
+	play_anim("death_" + facing_direction, true)
+	# Hold on the last frame — don't loop, don't return to idle
+	_one_shot_queue = ""  # prevent auto-returning to idle
+
 # ─────────────────────────────────────────────
 #  Inventory & Quest System
 # ─────────────────────────────────────────────
@@ -83,6 +93,10 @@ const ANIMS := {
 	"hit_side":     { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Hit_Base/Hit_Side-Sheet.png", "frames": 4, "fps": 10, "loop": false },
 	"hit_down":     { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Hit_Base/Hit_Down-Sheet.png", "frames": 4, "fps": 10, "loop": false },
 	"hit_up":       { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Hit_Base/Hit_Up-Sheet.png",   "frames": 4, "fps": 10, "loop": false },
+
+	"death_side":   { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Death_Base/Death_Side-Sheet.png", "frames": 8, "fps": 8, "loop": false },
+	"death_down":   { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Death_Base/Death_Down-Sheet.png", "frames": 8, "fps": 8, "loop": false },
+	"death_up":     { "path": "res://assets/Pixel Crawler - Free Pack/Entities/Characters/Body_A/Animations/Death_Base/Death_Up-Sheet.png",   "frames": 8, "fps": 8, "loop": false },
 }
 
 var current_action: String = "idle"
@@ -122,6 +136,25 @@ func _ready() -> void:
 	var pause_menu_scene = preload("res://scenes/pause_menu.tscn")
 	var pause_menu = pause_menu_scene.instantiate()
 	add_child(pause_menu)
+
+	# Apply customized avatar skin tint & instantiate Avatar HUD
+	if GameState.avatar_created:
+		var skin_colors := [
+			Color(1.0, 0.90, 0.82),  # Light skin
+			Color(0.65, 0.45, 0.32),  # Brown skin
+			Color(0.88, 0.68, 0.55),  # Redhead / Tanned
+			Color(0.55, 0.80, 0.45),  # Orc Green
+			Color(0.68, 0.55, 0.82),  # Elf Purple
+			Color(0.96, 0.72, 0.78),  # Pink
+			Color(0.85, 0.85, 0.88),  # Pale / Skeleton
+			Color(0.52, 0.58, 0.65),  # Undead
+		]
+		var face_i = clampi(GameState.avatar_face_index, 0, skin_colors.size() - 1)
+		sprite.modulate = skin_colors[face_i]
+
+	var avatar_hud_scene = preload("res://scenes/avatar_hud.tscn")
+	var avatar_hud = avatar_hud_scene.instantiate()
+	add_child(avatar_hud)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:

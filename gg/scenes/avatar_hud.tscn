@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://avatar_hud_scene"]
+
+[ext_resource type="Script" path="res://scripts/avatar_hud.gd" id="1_hud"]
+
+[node name="AvatarHUD" type="CanvasLayer"]
+script = ExtResource("1_hud")

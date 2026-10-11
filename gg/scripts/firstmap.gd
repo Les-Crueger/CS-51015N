@@ -19,7 +19,7 @@ func _ready() -> void:
 	
 	# Spawn bonfire/sign
 	var sign_obj = sign_scene.instantiate()
-	sign_obj.position = Vector2(700, 300)
+	sign_obj.position = Vector2(450, 300)
 	add_child(sign_obj)
 
 	# Spawn Fisherman NPC near the water

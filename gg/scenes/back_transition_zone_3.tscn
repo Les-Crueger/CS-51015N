@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://iyfhvgnwpvkq"]
+
+[ext_resource type="Script" uid="uid://cu1a4xpsyy4vw" path="res://scripts/level_transition.gd" id="1_transition"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_back3"]
+size = Vector2(88, 72)
+
+[node name="BackTransitionZone3" type="Area2D" unique_id=1085946414]
+collision_layer = 0
+script = ExtResource("1_transition")
+required_key_name = ""
+locked_message = ""
+use_custom_spawn = true
+spawn_walk_direction = Vector2(-1, 0)
+spawn_walk_distance = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1985721628]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_back3")
