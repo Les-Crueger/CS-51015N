@@ -24,6 +24,14 @@ Week 3: Level Design
 Week 4 and 5 (unified) Art , Animation, & Particles AND Ui & UX / Audio
 [![Watch the Video](<img width="720" height="404" alt="first background" src="https://github.com/user-attachments/assets/327489d1-91cd-4cba-8f51-f922fb3247ec" />)] https://drive.google.com/file/d/1LhiRT5-LYzMKL3bkn8oShJlzVQN4efTI/view?usp=sharing 
 
+Week 6 and 7 (Unified) Ai, Enemies(But no PvE), Juice, Save, Optimization and others
+[![Watch the Video](<img width="720" height="404" alt="first background" src="https://github.com/user-attachments/assets/327489d1-91cd-4cba-8f51-f922fb3247ec" />)]
+https://drive.google.com/file/d/17JSQiecPckLiAUf8hZhOFZE0ldmqSQln/view?usp=sharing
+
+
+
+
+
 
 
 
