@@ -156,6 +156,11 @@ func _ready() -> void:
 	var avatar_hud = avatar_hud_scene.instantiate()
 	add_child(avatar_hud)
 
+	# Virtual Touch / Web on-screen controls (Week 8 platform tweak)
+	var touch_scene = preload("res://scenes/touch_controls.tscn")
+	var touch_ui = touch_scene.instantiate()
+	add_child(touch_ui)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_K:
