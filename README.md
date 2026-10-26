@@ -28,6 +28,13 @@ Week 6 and 7 (Unified) Ai, Enemies(But no PvE), Juice, Save, Optimization and ot
 [![Watch the Video](<img width="720" height="404" alt="first background" src="https://github.com/user-attachments/assets/327489d1-91cd-4cba-8f51-f922fb3247ec" />)]
 https://drive.google.com/file/d/17JSQiecPckLiAUf8hZhOFZE0ldmqSQln/view?usp=sharing
 
+Week 8: Multi-Platform and Team Git 
+(Although it is in editor, it works on mobile and pc)
+[![Watch the Video](<img width="720" height="404" alt="first background" src="https://github.com/user-attachments/assets/327489d1-91cd-4cba-8f51-f922fb3247ec" />)]
+https://drive.google.com/file/d/1SxD4X2WCYUC4JkUDimjoEbXhtD0h3Ewq/view?usp=sharing
+
+
+
 
 
 
